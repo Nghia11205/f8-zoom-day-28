@@ -136,7 +136,7 @@ const musicPlayer = {
     isScroll: true,
     //
     start() {
-        // this.loadPlayerState();
+        this.localStorage();
         this.renderPlaylist();
         this.setupCurrentSong();
         this.setupEventListeners();
@@ -159,6 +159,7 @@ const musicPlayer = {
             if (e.code === "Space" || e.code === "Enter") {
                 e.preventDefault(); // Ngăn chặn hành động mặc định của phím
                 this.togglePlayPause();
+                this.volume.hidden = true;
             }
             // Kiểm tra phím mũi tên trái hoặc phải
             if (e.code === "ArrowLeft") {
