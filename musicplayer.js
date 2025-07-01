@@ -154,7 +154,74 @@ const musicPlayer = {
         this.playToggleBtn.onclick = () => {
             this.togglePlayPause();
         };
-
+        document.addEventListener("keydown", (e) => {
+            // Kiểm tra phím Space hoặc Enter
+            if (e.code === "Space" || e.code === "Enter") {
+                e.preventDefault(); // Ngăn chặn hành động mặc định của phím
+                this.togglePlayPause();
+            }
+            // Kiểm tra phím mũi tên trái hoặc phải
+            if (e.code === "ArrowLeft") {
+                this.audioPlayer.currentTime -= 5;
+            }
+            if (e.code === "ArrowRight") {
+                this.audioPlayer.currentTime += 5;
+            }
+            if (e.code === "KeyL") {
+                this.isLoopMode = !this.isLoopMode;
+                this.updateLoopButtonState();
+                localStorage.setItem(this.STORAGE_KEYS.loop, this.isLoopMode);
+            }
+            if (e.code === "KeyS") {
+                this.isShuffleMode = !this.isShuffleMode;
+                this.updateShuffleButtonState();
+                localStorage.setItem(
+                    this.STORAGE_KEYS.shuffle,
+                    this.isShuffleMode
+                );
+            }
+            if (e.code === "KeyV") {
+                this.volume.hidden = !this.volume.hidden;
+            }
+            if (e.code === "KeyP") {
+                this.handleSongNavigation(this.PREV_SONG);
+            }
+            if (e.code === "KeyN") {
+                this.handleSongNavigation(this.NEXT_SONG);
+            }
+            if (e.code === "KeyM") {
+                if (this.audioPlayer.volume > 0) {
+                    this.audioPlayer.volume = 0;
+                    this.volume.value = 0;
+                } else {
+                    this.audioPlayer.volume = 1;
+                    this.volume.value = 100;
+                }
+            }
+            if (e.code === "KeyR") {
+                this.audioPlayer.currentTime = 0;
+                this.currentSongCurrent.textContent = this.handleTime();
+                if (this.isPlaying) {
+                    this.audioPlayer.play();
+                }
+            }
+            if (e.code === "ArrowUp") {
+                const newVolume =
+                    this.audioPlayer.volume + 0.1 < 1
+                        ? this.audioPlayer.volume + 0.1
+                        : 1;
+                this.audioPlayer.volume = newVolume;
+                this.volume.value = newVolume * 100;
+            }
+            if (e.code === "ArrowDown") {
+                const newVolume =
+                    this.audioPlayer.volume + 0.1 > 0
+                        ? this.audioPlayer.volume - 0.1
+                        : 1;
+                this.audioPlayer.volume = newVolume;
+                this.volume.value = newVolume * 100;
+            }
+        });
         //Khi audio bắt đầu;
         this.audioPlayer.onplay = () => {
             this.isPlaying = true;
@@ -196,7 +263,9 @@ const musicPlayer = {
         // Khi click vào cái loa.
         this.volumeBtn.onmouseup = () => {
             this.volume.hidden = false;
+            this.volume.focus();
         };
+        //Click ra ngoai sẽ ẩn volume
         document.body.onmousedown = (event) => {
             if (event.target !== this.volume) {
                 this.volume.hidden = true;
