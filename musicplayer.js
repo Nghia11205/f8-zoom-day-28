@@ -163,14 +163,17 @@ const musicPlayer = {
             // Kiểm tra phím mũi tên trái hoặc phải
             if (e.code === "ArrowLeft") {
                 this.audioPlayer.currentTime -= 5;
+                this.volume.hidden = true;
             }
             if (e.code === "ArrowRight") {
                 this.audioPlayer.currentTime += 5;
+                this.volume.hidden = true;
             }
             if (e.code === "KeyL") {
                 this.isLoopMode = !this.isLoopMode;
                 this.updateLoopButtonState();
                 localStorage.setItem(this.STORAGE_KEYS.loop, this.isLoopMode);
+                this.volume.hidden = true;
             }
             if (e.code === "KeyS") {
                 this.isShuffleMode = !this.isShuffleMode;
@@ -179,15 +182,19 @@ const musicPlayer = {
                     this.STORAGE_KEYS.shuffle,
                     this.isShuffleMode
                 );
+                this.volume.hidden = true;
             }
             if (e.code === "KeyV") {
                 this.volume.hidden = !this.volume.hidden;
+                this.volume.focus();
             }
             if (e.code === "KeyP") {
                 this.handleSongNavigation(this.PREV_SONG);
+                this.volume.hidden = true;
             }
             if (e.code === "KeyN") {
                 this.handleSongNavigation(this.NEXT_SONG);
+                this.volume.hidden = true;
             }
             if (e.code === "KeyM") {
                 if (this.audioPlayer.volume > 0) {
@@ -204,6 +211,7 @@ const musicPlayer = {
                 if (this.isPlaying) {
                     this.audioPlayer.play();
                 }
+                this.volume.hidden = true;
             }
             if (e.code === "ArrowUp") {
                 const newVolume =
